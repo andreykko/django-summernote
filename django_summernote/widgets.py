@@ -89,6 +89,7 @@ class SummernoteWidget(SummernoteWidgetBase):
         del final_attrs['id']  # Use original attributes without id.
 
         contexts = self.template_contexts()
+        print(json.dumps(contexts), 'AAAAAAAAAAAAAAAAAAA')
 
         url = reverse('django_summernote-editor',
                       kwargs={'id': attrs['id']})
