@@ -39,6 +39,7 @@ __summernote_options__ = [
 
     'width',
     'height',
+    'captionIt',
 ]
 
 
