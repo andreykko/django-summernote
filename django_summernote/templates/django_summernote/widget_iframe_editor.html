@@ -85,7 +85,14 @@
                             url: settings.url.upload_attachment,
                         })
                         .success(function (result, textStatus, jqXHR) {
-                            data = $.parseJSON(result);
+                            try
+                            {
+                               data = $.parseJSON(result);
+                            }
+                            catch(e)
+                            {
+                               data = result
+                            }
                             $.each(data.files, function (index, file) {
                                 sn.summernote("insertImage", file.url);
                             });
