@@ -7,6 +7,9 @@ from django.core.exceptions import ImproperlyConfigured
 
 
 def uploaded_filepath(instance, filename):
+    """
+    Returns default filepath for uploaded files.
+    """
     ext = filename.split('.')[-1]
     filename = "%s.%s" % (uuid.uuid4(), ext)
     today = datetime.now().strftime('%Y-%m-%d')
@@ -67,6 +70,7 @@ SETTINGS_DEFAULT = {
         'cs': 'cs-CZ',
         'da': 'da-DK',
         'de': 'de-DE',
+        'el': 'el-GR',
         'es': 'es-ES',
         'fa': 'fa-IR',
         'fi': 'fi-FI',
@@ -80,6 +84,7 @@ SETTINGS_DEFAULT = {
         'ja': 'ja-JP',
         'ko': 'ko-KR',
         'lt': 'lt-LT',
+        'mn': 'mn-MN',
         'nb': 'nb-NO',
         'nl': 'nl-NL',
         'pl': 'pl-PL',
@@ -90,6 +95,7 @@ SETTINGS_DEFAULT = {
         'sl': 'sl-SI',
         'sr': 'sr-RS',
         'sv': 'sv-SE',
+        'ta': 'ta-IN',
         'th': 'th-TH',
         'tr': 'tr-TR',
         'uk': 'uk-UA',
@@ -115,6 +121,7 @@ SETTINGS_DEFAULT = {
         static_url('django_summernote/jquery.iframe-transport.js'),
         static_url('django_summernote/jquery.fileupload.js'),
         static_url('django_summernote/summernote.min.js'),
+        static_url('django_summernote/ResizeSensor.js'),
     ),
     'css': (),
     'js': (),
@@ -128,6 +135,7 @@ SETTINGS_DEFAULT = {
         static_url('django_summernote/jquery.iframe-transport.js'),
         static_url('django_summernote/jquery.fileupload.js'),
         static_url('django_summernote/summernote.min.js'),
+        static_url('django_summernote/ResizeSensor.js'),
     ),
     'css_for_inplace': (),
     'js_for_inplace': (),

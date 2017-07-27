@@ -1,9 +1,15 @@
 # -*- coding: utf-8 -*-
 from django.contrib.admin.sites import AdminSite
 from django.contrib.auth.models import User
-from django.core.urlresolvers import reverse
-from django.test import TestCase, Client
+try:
+    # Django >= 2.0
+    from django.urls import reverse
+except ImportError:
+    from django.core.urlresolvers import reverse
+
+from django.test import TestCase, Client, override_settings
 from django_summernote.settings import summernote_config, get_attachment_model
+import json
 from imp import reload
 
 
@@ -128,8 +134,7 @@ class DjangoSummernoteTest(TestCase):
         summernote_config['attachment_storage_class'] = \
             'django.core.files.storage.DefaultStorage'
 
-        from django_summernote.models import \
-            Attachment, _get_attachment_storage
+        from django_summernote.models import _get_attachment_storage
         file_field = get_attachment_model()._meta.get_field('file')
         original_storage = file_field.storage
         file_field.storage = _get_attachment_storage()
@@ -168,7 +173,6 @@ class DjangoSummernoteTest(TestCase):
             reload(models)
 
         # IOError with patching storage class
-        from django_summernote.models import Attachment
         from dummyplug.storage import IOErrorStorage
         file_field = get_attachment_model()._meta.get_field('file')
         original_storage = file_field.storage
@@ -260,6 +264,18 @@ class DjangoSummernoteTest(TestCase):
             response = self.client.post(url, {'files': [fp]})
             self.assertEqual(response.status_code, 200)
 
+    @override_settings(USE_THOUSAND_SEPARATOR=True)
+    def test_attachment_with_thousand_separator_option(self):
+        import os
+        url = reverse('django_summernote-upload_attachment')
+        size = os.path.getsize(__file__)
+
+        with open(__file__, 'rb') as fp:
+            response = self.client.post(url, {'files': [fp]})
+            self.assertEqual(response.status_code, 200)
+            res = json.loads(response.content.decode('utf-8'))
+            self.assertEqual(res['files'][0]['size'], size)
+
     def test_lang_specified(self):
         old_lang = summernote_config['lang']
         summernote_config['lang'] = 'ko-KR'
@@ -311,3 +327,19 @@ class DjangoSummernoteTest(TestCase):
             ma.get_form(None).base_fields['foobar'].widget,
             SummernoteWidget
         )
+
+    def test_attachment_admin_default_name(self):
+        from django_summernote.admin import AttachmentAdmin
+        from django_summernote.models import Attachment
+        from django.core.files import File
+        import os
+
+        aa = AttachmentAdmin(Attachment, self.site)
+        attachment = Attachment()
+        with open(__file__, 'rb') as fp:
+            djangoFile = File(fp)
+            djangoFile.name = os.path.basename(djangoFile.name)
+            attachment.file = djangoFile
+            self.assertEqual(attachment.name, None)
+            aa.save_model(None, attachment, None, None)
+            self.assertEqual(attachment.name, os.path.basename(__file__))

@@ -13,10 +13,9 @@ from django_summernote.settings import summernote_config
 __all__ = ['AbstractAttachment', 'Attachment', ]
 
 
-# module importer code comes from
-# https://github.com/django-debug-toolbar/django-debug-toolbar/
-
 def _get_attachment_storage():
+    # module importer code comes from
+    # https://github.com/django-debug-toolbar/django-debug-toolbar/
     if summernote_config['attachment_storage_class']:
         storage_path = summernote_config['attachment_storage_class']
         try:
@@ -48,8 +47,7 @@ def _get_attachment_storage():
 
 
 class AbstractAttachment(models.Model):
-
-    name = models.CharField(max_length=255, null=True, blank=True)
+    name = models.CharField(max_length=255, null=True, blank=True, help_text="Defaults to filename, if left blank")
     file = models.FileField(
         upload_to=summernote_config['attachment_upload_to'],
         storage=_get_attachment_storage()
@@ -64,5 +62,5 @@ class AbstractAttachment(models.Model):
 
 
 class Attachment(AbstractAttachment):
-
     pass
+
