@@ -1,4 +1,3 @@
-import os
 from setuptools import setup, find_packages
 from django_summernote import version, PROJECT
 
@@ -16,30 +15,23 @@ CLASSIFIERS = [
     'Programming Language :: Python :: 3',
     'Programming Language :: Python :: 3.4',
     'Programming Language :: Python :: 3.5',
+    'Programming Language :: Python :: 3.6',
     'Programming Language :: Python',
     'Topic :: Internet :: WWW/HTTP',
     'Topic :: Software Development :: Libraries :: Python Modules',
     'Topic :: Utilities',
 ]
 
-for directory in ['static', 'templates']:
-    for root, dirs, files in os.walk(os.path.join(MODULE_NAME, directory)):
-        for filename in files:
-            PACKAGE_DATA.append("%s/%s" % (root[len(MODULE_NAME) + 1:],
-                                           filename))
-
 
 setup(
     name=PROJECT,
     version=version,
     packages=find_packages(),
-    package_data={'': PACKAGE_DATA, },
+    include_package_data=True,
     zip_safe=False,
 
-    author='Park Hyunwoo',
-    author_email='ez.amiryo' '@' 'gmail.com',
-    maintainer='Park Hyunwoo',
-    maintainer_email='ez.amiryo' '@' 'gmail.com',
+    author='django-summernote contributors',
+    maintainer='django-summernote maintainers',
     url='http://github.com/summernote/django-summernote',
 
     description='Summernote plugin for Django',
