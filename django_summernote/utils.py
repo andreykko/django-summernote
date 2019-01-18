@@ -59,7 +59,7 @@ SUMMERNOTE_THEME_FILES = {
             '//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css',
         ),
         'base_js': (
-            '//code.jquery.com/jquery-3.3.1.min.js',
+            '//code.jquery.com/jquery-2.2.4.min.js',
             '//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js',
         ),
         'default_css': (
