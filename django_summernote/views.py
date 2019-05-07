@@ -1,5 +1,5 @@
 from django import VERSION as django_version
-from django.contrib.staticfiles.templatetags.staticfiles import static
+from django.templatetags.static import static
 from django.http import HttpResponse, JsonResponse
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext as _
@@ -38,8 +38,8 @@ class SummernoteEditor(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(SummernoteEditor, self).get_context_data(**kwargs)
 
-        context['id_src'] = self.kwargs['id']
-        context['id'] = self.kwargs['id'].replace('-', '_')
+        context['id'] = self.kwargs['id']
+        context['id_safe'] = self.kwargs['id'].replace('-', '_')
         context['css'] = self.css
         context['js'] = self.js
         context['config'] = config
@@ -88,7 +88,6 @@ class SummernoteUploadAttachment(View):
                 # create instance of appropriate attachment class
                 klass = get_attachment_model()
                 attachment = klass()
-
                 attachment.file = file
                 attachment.name = file.name
 
@@ -100,6 +99,13 @@ class SummernoteUploadAttachment(View):
 
                 # calling save method with attachment parameters as kwargs
                 attachment.save(**kwargs)
+
+                # choose relative/absolute url by config
+                attachment.url = attachment.file.url
+
+                if config['attachment_absolute_uri']:
+                    attachment.url = request.build_absolute_uri(attachment.url)
+
                 attachments.append(attachment)
 
             return HttpResponse(render_to_string('django_summernote/upload_attachment.json', {

@@ -1,7 +1,7 @@
 import json
 from django import forms
 from django.conf import settings as django_settings
-from django.contrib.staticfiles.templatetags.staticfiles import static
+from django.templatetags.static import static
 from django.forms.utils import flatatt
 from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
@@ -100,8 +100,8 @@ class SummernoteWidget(SummernoteWidgetBase):
             name, value, attrs=attrs, **kwargs
         )
         context = {
-            'id': attrs['id'].replace('-', '_'),
-            'id_src': attrs['id'],
+            'id': attrs['id'],
+            'id_safe': attrs['id'].replace('-', '_'),
             'flat_attrs': flatatt(self.final_attr(attrs)),
             'settings': json.dumps(summernote_settings),
             'src': reverse('django_summernote-editor', kwargs={'id': attrs['id']}),
@@ -143,8 +143,8 @@ class SummernoteInplaceWidget(SummernoteWidgetBase):
             name, value, attrs=attrs, **kwargs
         )
         context = {
-            'id': attrs['id'].replace('-', '_'),
-            'id_src': attrs['id'],
+            'id': attrs['id'],
+            'id_safe': attrs['id'].replace('-', '_'),
             'attrs': self.final_attr(attrs),
             'config': config,
             'settings': json.dumps(summernote_settings),
