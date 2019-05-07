@@ -8,7 +8,12 @@
         {% for url in js %}
         <script src="{{ url }}"></script>{% endfor %}
         <style>
-        html, body { margin: 0; }
+        html, body {
+            margin: 0;
+        }
+        .note-editor {
+            margin-bottom: 0;
+        }
         </style>
     </head>
     <body>
@@ -120,6 +125,6 @@
         // Hide resize bar - resizing iframe is not prepared, yet.
         $('.note-resizebar').hide();
     });
-    initSummernote_{{ id }}();
+    initSummernote_{{ id_safe }}();
     </script>
 </html>
